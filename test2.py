@@ -1,7 +1,5 @@
 import os
-print(os.getcwd()) 
-os.chdir("/Users/Andrew/Desktop/HTML/Bergen Economic Data EDA") 
-print(os.getcwd()) 
+
 
 from sentence_transformers import SentenceTransformer
 import pandas as pd
