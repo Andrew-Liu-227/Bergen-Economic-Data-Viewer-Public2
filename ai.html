@@ -108,7 +108,7 @@
         userInput.value = "";
 
         // Send question to backend
-        const response = await fetch("http://localhost:5000/ask", {
+        const response = await fetch("https://bergen-economic-data-viewer-public2.onrender.com/ask", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question }),
