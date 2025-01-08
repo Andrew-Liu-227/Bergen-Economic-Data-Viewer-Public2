@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bergen Economic Data Chatbot</title>
+    <link rel="stylesheet" href="aistyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .message {
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+      }
+      .user {
+        color: #f4982e;
+      }
+      .bot {
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar__container">
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="index.html" class="navbar__links"> Visualizations </a>
+          </li>
+          <li class="navbar__item">
+            <a href="ai.html" class="navbar__links"> AI </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="background"></div>
+
+    <div class="firstimage">
+      <img
+        src="AI text box.png"
+        alt="Ask the AI chatbot a question about Bergen Economic Data"
+      />
+    </div>
+
+
+
+    <div class="secondimage">
+      <img
+        src="Secondtext.png"
+        alt="Example Questions:
+
+        How many people were unemployed in Bergen County in 2023?
+        What is the average houshold income in Bergen County?
+        What percent of Bergen County has a College Degree?
+        
+        "
+      />
+    </div>
+
+
+
+
+
+    <div class="stuff">
+      <div class="chat-container">
+        <div id="chat-window"></div>
+
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Ask a question..."
+          style="width: 80%"
+        />
+        <button id="send-btn">Send</button>
+
+        <div class="emphasis">
+          <img src="emphasis.png" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const sendBtn = document.getElementById("send-btn");
+      const userInput = document.getElementById("user-input");
+      const chatWindow = document.getElementById("chat-window");
+
+      sendBtn.addEventListener("click", async () => {
+        const question = userInput.value.trim();
+        if (!question) return;
+
+        // Display user question
+        const userMessage = document.createElement("div");
+        userMessage.className = "message user";
+        userMessage.innerText = "Question: " + question;
+        chatWindow.appendChild(userMessage);
+
+        // Clear input
+        userInput.value = "";
+
+        // Send question to backend
+        const response = await fetch("http://localhost:5000/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+        });
+
+        const data = await response.json();
+        const answer = data.answer;
+
+        // Display bot answer
+        const botMessage = document.createElement("div");
+        botMessage.className = "message bot";
+        botMessage.innerText = "Bot: " + answer;
+        chatWindow.appendChild(botMessage);
+
+        // Scroll to bottom
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      });
+
+      // Send on Enter key
+      userInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendBtn.click();
+      });
+    </script>
+  </body>
+</html>
